@@ -1,0 +1,9 @@
+{
+  "items" : [ {
+    "name" : "dfs_name_dir_list",
+    "value" : "/data/hdfs/namenode"
+  },{
+    "name" : "namenode_java_heapsize",
+    "value" : "1073741824"
+  } ]
+}

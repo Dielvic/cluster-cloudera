@@ -1,0 +1,2 @@
+# Cloudera Manager 7.4.4
+deb [arch=amd64] http://archive.cloudera.com/cm7/7.4.4/ubuntu1804/apt bionic-cm7.4.4 contrib

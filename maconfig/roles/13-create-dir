@@ -1,0 +1,57 @@
+---
+- name: Create a cluster
+  hosts: all
+  become: yes
+  tasks:
+
+
+    - name: Créer un répertoire data namenode
+      file:
+        state: directory
+        path: /data/hdfs/namenode
+        owner: admin
+        group: admin
+        mode: 0755
+      tags:
+        - nndir
+
+    - name: Créer un répertoire datanode
+      file:
+        state: directory
+        path: /data/hdfs/datanode
+        owner: admin
+        group: admin
+        mode: 0755
+      tags:
+        - dndir
+
+    - name: Créer un répertoire data gateway
+      file:
+        state: directory
+        path: /data/hdfs/gateway
+        owner: admin
+        group: admin
+        mode: 0755
+      tags:
+        - gwdir
+
+
+    - name: Créer un répertoire checkpoint namenode
+      file:
+        state: directory
+        path: /data/hdfs/namenode_checkpoint
+        owner: admin
+        group: admin
+        mode: 0755
+      tags:
+        - nncheckdir
+
+    - name: Créer un répertoire checkpoint secondarynamenode
+      file:
+        state: directory
+        path: /data/hdfs/gatewa_checkpoint
+        owner: admin
+        group: admin
+        mode: 0755
+      tags:
+        - gwcheckdir

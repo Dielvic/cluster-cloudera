@@ -1,0 +1,21 @@
+---
+- name: creation d'un utilisateur Mapr
+  hosts: all
+  become: yes
+  vars_files: vars.yml
+  tasks:
+    - name: Create group
+      group:
+        name: admin
+        state: present
+        gid: 5000
+
+    - name: Create Users Task
+      user:
+        name: admin
+        state: present
+        password: "{{ passwd | password_hash('sha512','A512') }}"
+        shell: /bin/bash
+        group: admin
+        groups: "sudo"
+        uid: 5000

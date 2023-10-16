@@ -1,0 +1,6 @@
+{
+  "items" : [ {
+    "name" : "dfs_replication",
+    "value" : "2"
+  } ]
+}

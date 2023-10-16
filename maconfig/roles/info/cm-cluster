@@ -1,0 +1,7 @@
+{
+  "items" : [ {
+    "name" : "my-cluster-ansible",
+    "version" : "CDH7",
+    "fullVersion" : "7.1.7"
+  } ]
+}

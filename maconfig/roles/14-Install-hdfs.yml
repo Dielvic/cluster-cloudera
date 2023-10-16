@@ -1,0 +1,71 @@
+---
+- name: Install hdfs
+  hosts: gatewayhost
+  become: yes
+  tasks:
+
+   
+    - name: Copy cm-service file 
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/roles/info/cm-service
+        dest: /home/admin/cm-service
+        owner: admin
+        group: admin
+        mode: '0666'
+      tags:
+        - copy-cmservice
+
+
+    - name: Enable HDFS
+      shell: curl -XPOST -u admin:admin -H "content-type:application/json" -d @/home/admin/cm-service http://localhost:7180/api/v44/clusters/my-cluster-ansible/services
+      tags:
+        - enablehdfs
+
+
+    - name: Créer un fichier vide cm-roles
+      file:
+        path: /home/admin/cm-roles
+        state: touch
+        owner: admin
+        group: admin
+        mode: 0666
+      tags:
+        - touch-roles
+
+    - name: Copy cm-roles.sh file 
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/roles/info/cm-roles.sh
+        dest: /home/admin/cm-roles.sh
+        owner: admin
+        group: admin
+        mode: 0777
+      tags:
+        - copy-roles.sh
+
+
+    - name: Exécution du cm-roles.sh
+      remote_user: admin
+      command: bash /home/admin/cm-roles.sh
+      tags:
+        - script
+
+    - name:  Assign Roles
+      shell: curl -XPOST -u admin:admin -H "content-type:application/json" -d @/home/admin/cm-roles http://localhost:7180/api/v44/clusters/my-cluster-ansible/services/hdfs/roles
+      tags:
+        - assign-roles
+
+    - name: Copy cm-service-config file 
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/roles/info/cm-service-config
+        dest: /home/admin/cm-service-config
+        owner: admin
+        group: admin
+        mode: '0666'
+      tags:
+        - copy-cmserviceconfig
+
+    - name: mise à jour du facteur de réplication
+      shell: curl -XPOST -u admin:admin -H "content-type:application/json" -d @/home/admin/cm-service http://localhost:7180/api/v44/clusters/my-cluster-ansible/services/hdfs/config
+      tags:
+        - updatereplication
+

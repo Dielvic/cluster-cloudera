@@ -1,0 +1,16 @@
+---
+- name: Install Cloudera Manager
+  hosts: cdhmanager
+  become: yes
+  tasks:
+
+
+
+    - name: Install cloudera-manager-daemons
+      apt: name=cloudera-manager-daemons  state=present
+
+    - name: Install cloudera-manager-agent
+      apt: name=cloudera-manager-agent  state=present
+
+    - name: Install cloudera-manager
+      apt: name=cloudera-manager-server  state=present

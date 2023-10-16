@@ -1,0 +1,21 @@
+---
+- name: Installation de Java8
+  hosts: all
+  become: yes
+  tasks:
+
+
+    - name: Install Java8 package in /usr/lib/jvm  (Ubuntu/Debian)
+      apt:
+        name: openjdk-8-jdk
+        state: present
+        update_cache: yes
+
+
+
+    - name: Export Java home
+      remote_user: admin
+      shell: export  "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64"
+      tags:
+        - export
+

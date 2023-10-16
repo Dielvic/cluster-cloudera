@@ -1,0 +1,21 @@
+
+---
+- name: Create databases and users
+  hosts: all
+  become: yes
+  become_user: postgres
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+  tasks:
+
+    - name: set standard_conforming_strings=off
+      community.postgresql.postgresql_set:
+        name: standard_conforming_strings
+        value: off
+        db: "{{ item }}" 
+      loop:
+        - hive
+        - oozie
+      tags:
+        - standard_conf_str
+      

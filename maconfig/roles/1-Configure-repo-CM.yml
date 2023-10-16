@@ -1,0 +1,32 @@
+---
+- name: Préparation des cluster
+  hosts: all
+  become: yes
+  tasks:
+
+
+    - name: Télécharger la fichier "cloudera-manager-trial.list"
+      get_url:
+        url:  https://archive.cloudera.com/cm7/7.4.4/ubuntu1804/apt/cloudera-manager-trial.list
+        dest: /etc/apt/sources.list.d/ 
+      tags:
+        -  Download-list
+
+    - name: Télécharger la fichier "archive.key"
+      get_url:
+        url:  https://archive.cloudera.com/cm7/7.4.4/ubuntu1804/apt/archive.key
+        dest: /home/admin 
+      tags:
+        -  Download-key
+
+    - name: Add key
+      ansible.builtin.shell:
+        cmd: apt-key add /home/admin/archive.key
+     
+      tags:
+         add-key
+
+    - name: Update repositories cache
+      apt: update_cache=yes  
+      tags:
+        update-repo

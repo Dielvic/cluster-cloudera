@@ -1,0 +1,7 @@
+---
+- name: Rebooting all node
+  hosts: all
+  become: true
+  tasks:
+    - name: Rebooting all the sever of my cluster 
+      reboot:

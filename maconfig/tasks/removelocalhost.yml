@@ -1,0 +1,22 @@
+
+---
+- name: Suppression des lignes localhosts sur les datanodes et secondary
+  hosts: noncdm
+  become: yes
+  tasks:
+
+
+
+    - name: "Remove localhost lines"
+      become: yes
+      become_user: root
+      lineinfile:
+        path: /etc/hosts
+        # Line to Search/Match against
+        regexp: '{{item.From}}'
+        # Line to Replace with
+        line: '{{item.To}}'
+        state: present  
+      with_items:
+       - { From: '^127\.0\.0\.1.*', To: ' '}
+       - { From: '^127.0.2.1 .*', To: ' '}

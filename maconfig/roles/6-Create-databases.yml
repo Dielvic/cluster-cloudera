@@ -1,0 +1,44 @@
+---
+- name: Create databases and users
+  hosts: all
+  become: yes
+  become_user: postgres
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+  tasks:
+
+    - name: Create users
+      postgresql_user:
+        name: "{{ item.user }}"
+        password: "{{ item.passwd }}"
+      with_items:
+        - { db: scm, user: scm, passwd: admin } 
+        - { db: rpm, user: rpm, passwd: admin } 
+        - { db: hue, user: hue, passwd: admin}
+        - { db: hive, user: hive, passwd: admin } 
+        - { db: oozie, user: oozie, passwd: admin } 
+        - { db: schemaregistry, user: schemaregistry, passwd: admin } 
+      tags:
+        - createusers
+
+
+    - name: Create all databases
+      postgresql_db:
+        name: "{{ item.db }}"
+        owner: "{{ item.user }}" 
+        template: template0
+        state: present
+        encoding: UTF8
+      with_items:
+        - { db: scm, user: scm, passwd: admin } 
+        - { db: rpm, user: rpm, passwd: admin } 
+        - { db: hue, user: hue, passwd: admin}
+        - { db: hive, user: hive, passwd: admin } 
+        - { db: oozie, user: oozie, passwd: admin } 
+        - { db: schemaregistry, user: schemaregistry, passwd: admin } 
+      tags:
+        - createdbs
+
+
+
+    

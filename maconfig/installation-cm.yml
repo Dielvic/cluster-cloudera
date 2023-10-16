@@ -1,0 +1,34 @@
+---
+# ./installation-cm.yml
+
+- import_playbook: roles/1-Configure-repo-CM.yml
+
+- import_playbook: roles/2-Install-java8.yml
+
+- import_playbook: roles/3-Install-ClouderaManager.yml
+
+- import_playbook: roles/4-Install-PostgreSQL.yml
+
+- import_playbook: roles/5-set-shared-buffer.yml
+
+- import_playbook: roles/6-Create-databases.yml
+
+- import_playbook: roles/7-standard_conforming_strings.yml
+
+- import_playbook: roles/8-setup-cdm-db.yml
+
+- import_playbook: roles/9-Start-runtime.yml
+
+- import_playbook: roles/10-Install-agent.yml
+
+- import_playbook: roles/11-Install-parcels.yml
+
+- import_playbook: roles/12-creation-cluster.yml
+
+- import_playbook: roles/13-create-dir
+
+- import_playbook: roles/14-Install-hdfs.yml
+
+- import_playbook: roles/15-config-hdfs
+
+

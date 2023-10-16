@@ -1,0 +1,62 @@
+---
+- name: Create a cluster
+  hosts: gatewayhost
+  become: yes
+  tasks:
+
+
+
+    - name: Copy cm-cluster file 
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/roles/info/cm-cluster
+        dest: /home/admin/cm-cluster
+        owner: admin
+        group: admin
+        mode: '0666'
+      tags:
+        - copy
+
+    - name:  Create a cluster
+      shell: 'curl -XPOST -u admin:admin -H "content-type:application/json" -d @/home/admin/cm-cluster http://localhost:7180/api/v44/clusters'
+      tags:
+        - createcluster
+
+    - name: Install jq
+      apt: name=jq state=present
+      tags:
+        - Installjq
+
+    - name: Créer un fichier vide cm-cluster-hosts
+      file:
+        path: /home/admin/cm-cluster-hosts
+        state: touch
+        owner: admin
+        group: admin
+        mode: 0666
+      tags:
+        - touch
+    
+
+    - name: Copy cm-cluster-hosts.sh file 
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/roles/info/cm-cluster-hosts.sh
+        dest: /home/admin/cm-cluster-hosts.sh
+        owner: admin
+        group: admin
+        mode: 0777
+      tags:
+        - copy-hosts.sh
+
+    - name: Exécution du cm-cluster-hosts.sh
+      remote_user: admin
+      command: bash /home/admin/cm-cluster-hosts.sh
+      tags:
+        - script
+
+        
+    - name:  Add nodes to Cluster
+      shell: 'curl -XPOST -u admin:admin -H "content-type:application/json" -d @/home/admin/cm-cluster-hosts http://localhost:7180/api/v44/clusters/my-cluster-ansible/hosts'
+      tags:
+        - addnodes
+
+      

@@ -1,0 +1,37 @@
+---
+- name: Install Cloudera Manager
+  hosts: noncdm
+  become: yes
+  tasks:
+
+
+
+    - name: Install cloudera-manager-daemons
+      apt: name=cloudera-manager-daemons  state=present
+
+    - name: Install cloudera-manager-agent
+      apt: name=cloudera-manager-agent  state=present
+
+    - name: Name of the host where Cloudera Manager Server is running
+      replace:
+        path: /etc/cloudera-scm-agent/config.ini
+        regexp: 'localhost'
+        replace: "gatewayhost"
+      tags:
+        - namecmshost
+
+    - name: Enable Cloudera Manager agent
+      ansible.builtin.shell:
+        cmd: systemctl enable cloudera-scm-agent 
+
+      tags:
+        - enableagent
+
+    - name: Create a directory /opt/cloudera/parcel-repo if it does not exist
+      file:
+        path: /opt/cloudera/parcel-repo
+        state: directory
+        mode: '0755'
+      tags:
+        - directory
+

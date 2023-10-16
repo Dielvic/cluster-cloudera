@@ -1,0 +1,9 @@
+{
+  "items" : [ {
+    "name" : "fs_checkpoint_dir_list",
+    "value" : "/data/hdfs/gateway_checkpoint"
+  }, {
+    "name" : "gateway_java_heapsize",
+    "value" : "1073741824"
+  } ]
+}

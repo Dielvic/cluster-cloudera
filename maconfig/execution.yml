@@ -1,0 +1,12 @@
+---
+# ./exection.yml
+
+- import_playbook: prerequis.yml
+
+- import_playbook: tasks/removelocalhost.yml
+
+- import_playbook: tasks/creation_user.yml
+
+- import_playbook: tasks/rebootmachine.yml
+
+- import_playbook: installation-cm.yml

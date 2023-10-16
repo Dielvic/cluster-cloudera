@@ -1,0 +1,10 @@
+---
+- name: Set up and configure the Cloudera Manager database
+  hosts: gatewayhost
+  become: yes
+  tasks:
+
+
+    - name:  Running the script to configure Cloudera Manager database
+      ansible.builtin.shell:
+        cmd: /opt/cloudera/cm/schema/scm_prepare_database.sh postgresql scm scm admin

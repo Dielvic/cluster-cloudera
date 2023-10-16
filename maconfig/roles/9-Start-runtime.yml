@@ -1,0 +1,19 @@
+---
+- name: Start Runtime and Other Software
+  hosts: gatewayhost
+  become: yes
+  tasks:
+
+
+    - name: Start Cloudera Manager Server
+      ansible.builtin.shell:
+        cmd: systemctl start cloudera-scm-server
+
+
+    - name: Enable Cloudera Manager Server
+      ansible.builtin.shell:
+        cmd: systemctl enable cloudera-scm-server 
+
+
+
+

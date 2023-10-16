@@ -1,0 +1,22 @@
+---
+- name: Set shared buffer
+  hosts: all
+  become: yes
+  tasks:
+
+
+    - name: set shared buffer
+      replace:
+        path: /etc/postgresql/10/main/postgresql.conf
+        regexp: '128'
+        replace: "256"
+        backup: yes
+
+     
+    - name: Enable service postgresql, and restart
+      service:
+        name: postgresql
+        enabled: yes
+        state: restarted
+      tags:
+        - start_at_boot

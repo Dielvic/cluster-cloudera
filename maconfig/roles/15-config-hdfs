@@ -1,0 +1,58 @@
+---
+- name: Install hdfs
+  hosts: gatewayhost
+  become: yes
+  tasks:
+
+   
+    - name: Copy cm-nn-config 
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/roles/info/cm-nn-config
+        dest: /home/admin/cm-nn-config
+        owner: admin
+        group: admin
+        mode: '0666'
+      tags:
+        - copy-cmnnconfig
+
+    - name: Copy cm-dn-config 
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/roles/info/cm-dn-config
+        dest: /home/admin/cm-dn-config
+        owner: admin
+        group: admin
+        mode: '0666'
+      tags:
+        - copy-cmdnconfig
+
+    - name: Copy cm-gw-config 
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/roles/info/cm-gw-config
+        dest: /home/admin/cm-gw-config
+        owner: admin
+        group: admin
+        mode: '0666'
+      tags:
+        - copy-cmgwconfig
+
+    - name: Confiduration du role namenode
+      shell: curl -XPUT -u admin:admin -H "content-type:application/json" -d @/home/admin/cm-nn-config http://localhost:7180/api/v44/clusters/my-cluster-ansible/services/hdfs/roleConfigGroups/hdfs-NAMENODE-BASE/config
+      tags:
+        - nnroleconfig
+
+    - name: Confiduration du role datanode
+      shell: curl -XPUT -u admin:admin -H "content-type:application/json" -d @/home/admin/cm-dn-config http://localhost:7180/api/v44/clusters/my-cluster-ansible/services/hdfs/roleConfigGroups/hdfs-DATANODE-BASE/config
+      tags:
+        - dnroleconfig
+
+    - name: Confiduration du role gateway
+      shell: curl -XPUT -u admin:admin -H "content-type:application/json" -d @/home/admin/cm-gw-config http://localhost:7180/api/v44/clusters/my-cluster-ansible/services/hdfs/roleConfigGroups/hdfs-SECONDARYNAMENODE-BASE/config
+      tags:
+        - gwroleconfig
+
+
+
+    - name: Start HDFS
+      shell: curl -XPOST -u admin:admin -H "content-type:application/json" -d @/home/user2/ClusterCloudera/maconfig/roles/info/cm-service http://localhost:7180/api/v44/clusters/my-cluster-ansible/services/hdfs/commands/start
+      tags:
+        - starthdfs

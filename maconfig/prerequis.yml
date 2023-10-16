@@ -1,0 +1,87 @@
+
+---
+- name: Préparation des cluster
+  hosts: all
+  become: yes
+  tasks:
+
+
+        
+    - name: Update repositories cache
+      apt: update_cache=yes
+
+    - name: Install build-essential
+      apt: name=build-essential state=present
+
+
+    - name: Disable AppArmor (Selinux for other kernel)
+      ansible.builtin.shell:
+        cmd: systemctl stop apparmor; systemctl disable apparmor
+    
+
+    - name: Set the swapiness
+      ansible.builtin.shell:
+        cmd: echo 'vm.swappiness = 10'| tee  /etc/sysctl.conf
+      tags:
+        - swapiness
+
+
+ 
+    - name: set NTP timezone
+      ansible.builtin.shell:
+        cmd: timedatectl set-timezone Europe/Paris    
+
+
+    - name: Disable the ufw firewall (on Ubuntu, if configured).
+      service:
+        name: ufw
+        state: stopped
+        enabled: false
+
+    - name: Arreter le sevice iptables
+      service:
+        name: iptables
+        service: stopped
+     
+    
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/file-config/rc-local.service 
+        dest: /etc/systemd/system/rc-local.service 
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: /home/user2/ClusterCloudera/maconfig/file-config/rc.local
+        dest: /etc/rc.local
+        owner: root
+        group: root
+        mode: '0744'
+      tags:
+        - copy_rc-local
+
+
+
+    - name: Activate rc-local
+      ansible.builtin.shell:
+        cmd: sudo systemctl start rc-local
+      tags:
+        - start_rc-local
+
+
+
+    - name: Additional setting for kernel
+      ansible.builtin.shell:
+        cmd: echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/enabled  ; echo "never" | sudo tee /sys/kernel/mm/transparent_hugepage/defrag; sysctl vm.swappiness=12;
+
+
+    - name: Install wget
+      apt:
+        name: wget
+        state: latest
+
+
+
+

@@ -1,0 +1,43 @@
+---
+- name: Install PostgreSQL10
+  hosts: all
+  become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python
+  tasks:
+
+
+    - name: Download JDBC
+      get_url:
+        url: https://jdbc.postgresql.org/download/postgresql-42.6.0.jar
+        dest: /usr/share/java/postgresql-connector-java.jar
+        mode: '0644'
+      tags:
+        - jdbc
+
+    - name: Install PostgreSQL10
+      apt: name=postgresql-10  state=present update_cache=yes
+      tags:
+        - postgresql
+
+    - name: Install python-pip 
+      apt: name=python-pip  state=present update_cache=yes
+      tags:
+        - python-pip
+
+    - name: install prerequisites
+      apt: name={{ item }} state=latest
+      with_items:
+        - libpq-dev
+        - python-psycopg2 
+      tags:
+        - psycopg2
+      notify:
+      - start PostgreSQL10
+       
+
+  handlers:   
+    - name: start PostgreSQL10
+      service: name=postgresql state=started
+
+    

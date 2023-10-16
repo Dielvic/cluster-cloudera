@@ -1,0 +1,12 @@
+---
+- name: Générer la clée SSH du node1 à copier vers les autres noeuds
+  hosts: node1
+  become: yes
+  tasks:
+    - name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+      community.crypto.openssh_keypair:
+        path: /home/vagrant/.ssh/id_ssh_rsa
+
+    - name: secure key
+      ansible.builtin.shell:
+        cmd: chmod 700 /home/vagrant/.ssh; chmod 640 /home/vagrant/.ssh/authorized_keys; chmod 600 /home/vagrant/.ssh/id_ssh_rsa
