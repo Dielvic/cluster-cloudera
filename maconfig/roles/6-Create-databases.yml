@@ -11,6 +11,7 @@
       postgresql_user:
         name: "{{ item.user }}"
         password: "{{ item.passwd }}"
+        role_attr_flags: SUPERUSER,CREATEDB,CREATEROLE
       with_items:
         - { db: scm, user: scm, passwd: admin } 
         - { db: rpm, user: rpm, passwd: admin } 
@@ -27,7 +28,6 @@
         name: "{{ item.db }}"
         owner: "{{ item.user }}" 
         template: template0
-        state: present
         encoding: UTF8
       with_items:
         - { db: scm, user: scm, passwd: admin } 
@@ -42,3 +42,14 @@
 
 
     
+    - name: Set confirming string off
+      postgresql_query:
+        query: ALTER DATABASE {{ item.db }} SET standard_conforming_strings=off
+        db: "{{ item.db }}"
+        login_user: "{{ item.user }}"
+        login_password: "{{ item.passwd }}"
+      with_items:
+        - { db: hive, user: hive, passwd: admin } 
+        - { db: oozie, user: oozie, passwd: admin } 
+      tags:
+        - confirmingstring

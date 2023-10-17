@@ -19,3 +19,15 @@
       tags:
         - standard_conf_str
       
+
+#    - name: Set confirming string off
+#      postgresql_query:#
+ #       query: ALTER DATABASE {{ item.db }} SET standard_conforming_strings=off
+ #       db: "{{ item.db }}"
+ #       login_user: "{{ item.user }}"
+ #       login_password: "{{ item.passwd }}"
+ #     with_items:
+ #       - { db: hive, user: hive, passwd: admin } 
+ #       - { db: oozie, user: oozie, passwd: admin } 
+ #     tags:
+ #       - confirmingstring     

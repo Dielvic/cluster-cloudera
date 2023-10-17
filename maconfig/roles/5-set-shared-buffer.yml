@@ -20,3 +20,8 @@
         state: restarted
       tags:
         - start_at_boot
+
+    - name: set shared buffer
+      shell: sed -i '90s/peer/md5/' /etc/postgresql/10/main/pg_hba.conf
+      tags:
+        - "md5"
