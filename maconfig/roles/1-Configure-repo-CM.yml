@@ -5,14 +5,14 @@
   tasks:
 
 
-    - name: Télécharger la fichier "cloudera-manager-trial.list"
+    - name: Télécharger le fichier "cloudera-manager-trial.list"
       get_url:
         url:  https://archive.cloudera.com/cm7/7.4.4/ubuntu1804/apt/cloudera-manager-trial.list
         dest: /etc/apt/sources.list.d/ 
       tags:
         -  Download-list
 
-    - name: Télécharger la fichier "archive.key"
+    - name: Télécharger le fichier "archive.key"
       get_url:
         url:  https://archive.cloudera.com/cm7/7.4.4/ubuntu1804/apt/archive.key
         dest: /home/admin 
